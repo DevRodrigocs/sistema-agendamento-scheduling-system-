@@ -3,6 +3,7 @@ import FormAgendamento from "./components/FormAgendamento";
 import ListaAgendamentos from "./components/ListaAgendamentos";
 import Footer from "./components/Footer";
 import { useState, useEffect } from "react";
+import "./styles/index.css";
 
 function App() {
 
@@ -14,6 +15,11 @@ function App() {
   const [agendamentoEditando, setAgendamentoEditando] = useState(null);
 
   const [filtro, setFiltro] = useState("")
+
+  const [darkMode, setDarkmode] = useState(() => {
+    const salvo = localStorage.getItem("darkMode")
+    return salvo ? JSON.parse(salvo) : false
+  })
 
   const agendamentosOrdenados = [...agendamentos].sort((a,b) => {
     const dataA = new Date(`${a.data}T${a.horario}`)
@@ -27,6 +33,10 @@ function App() {
     
     localStorage.setItem("agendamentos", JSON.stringify(agendamentos))
   }, [agendamentos])
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(darkMode))
+  }, [darkMode])
 
   function adicionarAgendamento(novoAgendamento) {
 
@@ -49,33 +59,29 @@ function App() {
   }
 
   return (
-    <div style={{
-      maxWidth: "800px", 
-      margin: "40px auto",
-      padding: "20px",
-      fontFamily: "Arial, sans-serif",
-      backgroundColor: "#f3f4f6",
-      minHeight: "100vh"
-    }}>
+    <div className={darkMode ? "app-container dark" : "app-container"}>
+      <div className="toolbar">
+        <button
+          className="toggle-btn"
+          onClick={() => setDarkmode(prev => !prev)}
+        >
+          {darkMode ? "☀️ Modo Claro" : "🌙 Modo Escuro"}
+        </button>
+      </div>
+
       <Header />
       <FormAgendamento 
         onAdd={adicionarAgendamento}
         agendamentoEditando={agendamentoEditando}
         onUpdate={atualizarAgendamento}
       />
-      <div style={{ width: "100%", marginBottom: "20px" }}>
+      <div className="search-wrapper">
         <input 
+          className="search-input"
           type="text"
           placeholder="🔍 Busca por nome..."
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "12px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            boxSizing: "border-box"
-          }}
        />
       </div>
 
@@ -83,6 +89,7 @@ function App() {
         agendamentos={agendamentosFiltrados}
         onRemove={removerAgendamento}
         onEdit={setAgendamentoEditando}
+        darkMode={darkMode}
       />
       <Footer />
     </div>

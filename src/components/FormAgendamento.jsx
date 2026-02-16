@@ -49,51 +49,47 @@ export default function FormAgendamento({ onAdd, agendamentoEditando, onUpdate }
     
 
     return (
-        <div>
+        <div className="form-container">
             <h2>Novo Agendamento</h2>
 
-            {mensagem && <p style={{ color: "green" }}>{mensagem}</p>}
+            {mensagem && <p className="mensagem sucesso">{mensagem}</p>}
 
-            <form onSubmit={handleSubmit} 
-                style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "10px",
-                    marginBottom: "30px"
-                }}
-            >
-                <input type="text"
+            <form onSubmit={handleSubmit} className="form-agendamento">
+                <input
+                className="input" 
+                type="text"
                 name="nome"
                 placeholder="Nome"
                 value={form.nome}
                 onChange={handleChange}
-                style={{ flex: "1 1 200px", padding: "8px"}}
-
                 />
 
-                <input type="text"
+                <input
+                className="input" 
+                type="text"
                 name="servico"
                 placeholder="Serviço"
                 value={form.servico}
                 onChange={handleChange}
-                style={{ flex: "1 1 200px", padding: "8px"}}
                 />
 
-                <input type="date"
+                <input
+                className="input" 
+                type="date"
                 name="data"
                 value={form.data}
                 onChange={handleChange}
-                style={{ flex: "1 1 200px", padding: "8px"}}
                 />
 
-                <input type="time"
+                <input
+                className="input" 
+                type="time"
                 name="horario"
                 value={form.horario}
                 onChange={handleChange}
-                style={{ flex: "1 1 200px", padding: "8px"}}
                 />
 
-                <button type="submit">{agendamentoEditando ? "Atualizar" : "Agendar"}</button>
+                <button className="submit-btn" type="submit">{agendamentoEditando ? "Atualizar" : "Agendar"}</button>
             </form>
         </div>
     );

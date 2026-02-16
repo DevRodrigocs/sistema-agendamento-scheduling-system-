@@ -1,0 +1,212 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.app-container {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 100%;
+    padding: 40px;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    color: #111;
+    background: #f8fafc;
+}
+
+.app-container.dark {
+    background-color: #111827;
+    color: #f9fafb;
+}
+
+.app-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.app-header h1 {
+    font-size: 28px;
+}
+
+
+.toolbar {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: #e5e7eb;
+}
+
+
+.search-wrapper {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+
+.form-container {
+    margin-bottom: 20px;
+}
+
+.mensagem.sucesso {
+    color: green;
+    margin-bottom: 10px;
+}
+
+.form-agendamento {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+    align-items: center;
+}
+
+.input {
+    flex: 1 1 200px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(16,24,40,0.08);
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+    transition: all 180ms ease;
+    outline: none;
+    font-size: 14px;
+    color: inherit;
+    min-width: 160px;
+}
+
+.input::placeholder {
+    color: #9ca3af;
+}
+
+.input:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(14,30,60,0.08);
+    border-color: rgba(59,130,246,0.9);
+}
+
+
+.submit-btn {
+   padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg,#06b6d4 0%, #10b981 100%);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(16,185,129,0.18);
+    transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+    align-self: center;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(16,185,129,0.22);
+}
+
+
+.app-container.dark .input {
+    background: #0f1724;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: none;
+}
+
+.form-container h2 {
+    margin-bottom: 12px;
+}
+
+.agendamentos-list {
+    list-style: none;
+    padding: 0;
+}
+
+.card {
+    background: #ffffff;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.app-container.dark .card {
+    background-color: #1f2337;
+}
+
+.status {
+    align-self: flex-start;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+
+.status.hoje { background: #22c55e; }
+.status.atrasado { background: #ef4444; }
+.status.futuro { background: #3b82f6; }
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn {
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-remove { background: #dc2626; }
+.btn-edit { background: #2563eb; }
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    opacity: 0.6;
+}
+
+.app-container.dark .toggle-btn {
+    background: #374151;
+    color: #f9fafb;
+}
+
+.app-container.dark .input,
+.app-container.dark .search-input {
+    background: #111827;
+    border: 1px solid #374151;
+    color: #f9fafb;
+}
+
+h2 {
+    margin: 0 0 14px 0;
+}
+
+.form-container {
+    margin-bottom: 32px;
+}
