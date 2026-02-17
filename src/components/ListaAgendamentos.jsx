@@ -33,7 +33,7 @@ export default function ListaAgendamentos({ agendamentos, onRemove, onEdit }) {
                     return (
 
                         <li key={ag.id} className="card">
-                            <span className={`status ${status}`}>{status.toUpperCase()}</span>
+                            <span className={`status ${status.toLowerCase()}`}>{status}</span>
 
                             <p><strong>{ag.nome}</strong></p>
                             <p>📅 {ag.data}</p>

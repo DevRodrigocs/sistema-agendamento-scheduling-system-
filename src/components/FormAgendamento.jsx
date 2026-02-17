@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-export default function FormAgendamento({ onAdd, agendamentoEditando, onUpdate }) {
+export default function FormAgendamento({ onAdd, agendamentoEditando, onUpdate, listaAgendamentos }) {
 
     const [form, setForm] = useState({
         nome: "",
@@ -25,8 +25,40 @@ export default function FormAgendamento({ onAdd, agendamentoEditando, onUpdate }
         });
     };
 
-    function handleSubmit(e) {
+   function handleSubmit(e) {
         e.preventDefault();
+        
+        const { nome, servico, data, horario } = form;
+
+        if (!nome || !data || !horario) {
+            alert("Preencha todos os campos!");
+            return;
+        }
+
+        const conflito = listaAgendamentos.some( (ag) => {
+            const mesmaData = ag.data.trim() === data.trim();
+            const mesmoHorario = ag.horario.trim() === horario.trim();
+            const diferente = ag.id !== agendamentoEditando?.id;
+
+            return mesmaData && mesmoHorario && diferente;
+        }
+        );
+
+        if (conflito) {
+            setMensagem({
+                tipo: "erro",
+                texto: "Já existe um agendamento nesse horário."
+            });
+            return;
+        }
+
+        const hoje = new
+        Date().toISOString().split("T")[0];
+
+        if (data < hoje) {
+            alert("Não é possível agendar para uma data passada.");
+            return;
+        }
         
         if (agendamentoEditando) {
             onUpdate(agendamentoEditando.id, form)
@@ -40,19 +72,22 @@ export default function FormAgendamento({ onAdd, agendamentoEditando, onUpdate }
             horario: ""
         });
 
-        setMensagem("Agendamento salvo com sucesso!")
+        setMensagem({
+                tipo: "sucesso",
+                texto: "Agendamento salvo com sucesso!"
+            })
 
         setTimeout(() => {
             setMensagem("")
         }, 2000)
     } 
     
-
+ 
     return (
         <div className="form-container">
             <h2>Novo Agendamento</h2>
 
-            {mensagem && <p className="mensagem sucesso">{mensagem}</p>}
+            {mensagem && (<p className={`mensagem ${mensagem.tipo}`}>{mensagem.texto}</p>)}
 
             <form onSubmit={handleSubmit} className="form-agendamento">
                 <input

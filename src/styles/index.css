@@ -69,7 +69,26 @@ html, body {
 }
 
 .mensagem.sucesso {
-    color: green;
+    align-self: flex-start;
+    text-align: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    background-color: green;
+    margin-bottom: 10px;
+}
+
+.mensagem.erro {
+    align-self: flex-start;
+    text-align: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: #dc2626;
+    color: white;
     margin-bottom: 10px;
 }
 
@@ -157,16 +176,27 @@ html, body {
 
 .status {
     align-self: flex-start;
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: 4px 8px;
+    border-radius: 6px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 600;
     color: white;
 }
 
-.status.hoje { background: #22c55e; }
-.status.atrasado { background: #ef4444; }
-.status.futuro { background: #3b82f6; }
+.status.atrasado {
+    background-color: #fecaca;
+    color: #7f1d1d;
+}
+
+.status.futuro {
+    background-color: #bbf7d0;
+    color: #065f46;
+}
+
+.status.hoje { 
+    background-color: #74B9ff;
+    color: white;
+}
 
 .card-actions {
     display: flex;

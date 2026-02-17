@@ -74,6 +74,7 @@ function App() {
         onAdd={adicionarAgendamento}
         agendamentoEditando={agendamentoEditando}
         onUpdate={atualizarAgendamento}
+        listaAgendamentos={agendamentos}
       />
       <div className="search-wrapper">
         <input 
