@@ -1,25 +1,6 @@
-export default function ListaAgendamentos({ agendamentos, onRemove, onEdit }) {
+import { getStatus } from "../utils/dateUtils"
 
-    function getStatus(data, horario) {
-        const agora = new Date();
-        const dataAgendamento = new Date(`${data}T${horario}`);
-
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
-
-        const dataComparacao = new Date(dataAgendamento);
-        dataComparacao.setHours(0, 0, 0, 0);
-
-        if (dataComparacao.getTime() === hoje.getTime()) {
-            return "hoje"
-        }
-
-        if (dataAgendamento < agora) {
-            return "atrasado"
-        }
-
-        return "futuro"
-    }
+export default function ListaAgendamentos({ agendamentos, onRemove, onEdit, onToggleConcluido }) {
 
     return (
         <div>
@@ -32,12 +13,12 @@ export default function ListaAgendamentos({ agendamentos, onRemove, onEdit }) {
 
                     return (
 
-                        <li key={ag.id} className="card">
+                        <li key={ag.id} className={`card ${ag.concluido === true ? "concluido" : ""}`}>
                             <span className={`status ${status.toLowerCase()}`}>{status}</span>
 
                             <p><strong>{ag.nome}</strong></p>
                             <p>📅 {ag.data}</p>
-                            <p>⏰ {ag.horario}</p>
+                            <p>⏰ {ag.horario} - {ag.horarioFim}</p>
                             <p>💼 {ag.servico}</p>
 
                             <div className="card-actions">
@@ -48,11 +29,28 @@ export default function ListaAgendamentos({ agendamentos, onRemove, onEdit }) {
                                         if (confirmar) {
                                             onRemove(ag.id)
                                         }
-                                    }}>Remover</button>
+                                    }}
+                                >
+                                    Remover
+                                </button>
                                 <button
                                     className="btn btn-edit"
-                                    onClick={() => onEdit(ag)}>Editar</button>
+                                    onClick={() => onEdit(ag)}
+                                >
+                                    Editar
+                                </button>
+
+                                <button 
+                                    className={ag.concluido === true ? "btn-desmarcar" : "btn-concluir"}
+                                    onClick={() => onToggleConcluido(ag.id)}
+                                >
+                                    {ag.concluido === true ? "Desmarcar" : "Concluir"}
+                                </button>
                             </div>
+
+                            
+                                
+                            
                         </li>
                     )
                 })}

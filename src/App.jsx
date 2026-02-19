@@ -4,58 +4,47 @@ import ListaAgendamentos from "./components/ListaAgendamentos";
 import Footer from "./components/Footer";
 import { useState, useEffect } from "react";
 import "./styles/index.css";
+import { ordenarAgendamentos } from "./utils/ordenacaoUtils";
+import { filtrarAgendamentos } from "./utils/filtroUtils";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import {
+  criarAgendamento,
+  removerAgendamento,
+  atualizarAgendamento,
+  toggleConcluido
+} from "./services/agendamentoService";
 
 function App() {
-
-  const [agendamentos, setAgendamentos] = useState(() => {
-    const dadosSalvos = localStorage.getItem("agendamentos")
-    return dadosSalvos ? JSON.parse(dadosSalvos) : []
-  });
-
   const [agendamentoEditando, setAgendamentoEditando] = useState(null);
+  const [busca, setBusca] = useState("");
+  const [filtroData, setFiltroData] = useState("todos");
+  const [agendamentos, setAgendamentos] = useLocalStorage("agendamentos", []);
+  const [darkMode, setDarkMode] = useLocalStorage("darkMode", false);
 
-  const [filtro, setFiltro] = useState("")
+  const agendamentosOrdenados = ordenarAgendamentos(agendamentos);
 
-  const [darkMode, setDarkmode] = useState(() => {
-    const salvo = localStorage.getItem("darkMode")
-    return salvo ? JSON.parse(salvo) : false
-  })
-
-  const agendamentosOrdenados = [...agendamentos].sort((a,b) => {
-    const dataA = new Date(`${a.data}T${a.horario}`)
-    const dataB = new Date(`${b.data}T${b.horario}`)
-    return dataA - dataB
-  })
-
-  const agendamentosFiltrados = agendamentosOrdenados.filter(ag => ag.nome.toLowerCase().includes(filtro.toLowerCase()))
-
-  useEffect(() => {
-    
-    localStorage.setItem("agendamentos", JSON.stringify(agendamentos))
-  }, [agendamentos])
-
-  useEffect(() => {
-    localStorage.setItem("darkMode", JSON.stringify(darkMode))
-  }, [darkMode])
-
+  const agendamentosFiltrados = filtrarAgendamentos(
+    agendamentosOrdenados,
+    filtroData,
+    busca
+  );
+  
   function adicionarAgendamento(novoAgendamento) {
-
-    const agendamentoComId = {
-      ...novoAgendamento,
-      id: crypto.randomUUID()
-    }
-
-    setAgendamentos(prev => [...prev, agendamentoComId])
+    const novo = criarAgendamento(novoAgendamento);
+    setAgendamentos(prev => [...prev, novo]);
   }
 
-  function removerAgendamento(id) {
-    setAgendamentos(prev => prev.filter(agendamento => agendamento.id !== id))
+  function handleRemover(id) {
+    setAgendamentos(prev => removerAgendamento(prev, id));
   }
 
-  function atualizarAgendamento(id, dadosAtualizados) {
-    setAgendamentos(prev => prev.map(ag => ag.id === id ? { ...ag, ...dadosAtualizados } : ag))
+  function handleAtualizar(id, dados) {
+    setAgendamentos(prev => atualizarAgendamento(prev, id, dados));
+    setAgendamentoEditando(null);
+  }
 
-    setAgendamentoEditando(null)
+  function handleToggle(id) {
+    setAgendamentos(prev => toggleConcluido(prev, id));
   }
 
   return (
@@ -63,7 +52,7 @@ function App() {
       <div className="toolbar">
         <button
           className="toggle-btn"
-          onClick={() => setDarkmode(prev => !prev)}
+          onClick={() => setDarkMode(prev => !prev)}
         >
           {darkMode ? "☀️ Modo Claro" : "🌙 Modo Escuro"}
         </button>
@@ -73,28 +62,64 @@ function App() {
       <FormAgendamento 
         onAdd={adicionarAgendamento}
         agendamentoEditando={agendamentoEditando}
-        onUpdate={atualizarAgendamento}
+        onUpdate={handleAtualizar}
         listaAgendamentos={agendamentos}
       />
+
       <div className="search-wrapper">
         <input 
           className="search-input"
           type="text"
           placeholder="🔍 Busca por nome..."
-          value={filtro}
-          onChange={(e) => setFiltro(e.target.value)}
-       />
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+        />
+      </div>
+
+      <div className="filtros">
+        <button
+          className={`filter-btn ${filtroData === "hoje" ? "active" : ""}`}
+          onClick={() => setFiltroData("hoje")}
+          aria-pressed={filtroData === "hoje"}        
+        >
+          Hoje
+        </button>
+
+        <button 
+          className={`filter-btn ${filtroData === "futuro" ? "active" : ""}`}
+          onClick={() => setFiltroData("futuro")}
+          aria-pressed={filtroData === "futuro"}
+        >
+          Futuro
+        </button>
+
+        <button
+          className={`filter-btn ${filtroData === "atrasado" ? "active" : ""}`}
+          onClick={() => setFiltroData("atrasado")}
+          aria-pressed={filtroData === "atrasado"}
+        >
+          Atrasado
+        </button>
+
+        <button
+          className={`filter-btn ${filtroData === "todos" ? "active" : ""}`}
+          onClick={() => setFiltroData("todos")}
+          aria-pressed={filtroData === "todos"}
+        >
+          Todos
+        </button>
       </div>
 
       <ListaAgendamentos 
         agendamentos={agendamentosFiltrados}
-        onRemove={removerAgendamento}
+        onRemove={handleRemover}
         onEdit={setAgendamentoEditando}
+        onToggleConcluido={handleToggle}
         darkMode={darkMode}
       />
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
